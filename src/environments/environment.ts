@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  maxboxToken: 'pk.eyJ1Ijoic2FudGlncCIsImEiOiJja2t5YW5yNWEwdTh0MnZvZXhocWNzeWw4In0.7Q8aAPTTfrwIwfqeLQmN8g'
 };
 
 /*

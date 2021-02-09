@@ -7,6 +7,11 @@ import {
 } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 
+interface MarkerColor{
+  color: string;
+  marker: mapboxgl.Marker;
+}
+
 @Component({
   selector: 'app-markers',
   templateUrl: './markers.component.html',
@@ -36,6 +41,10 @@ export class MarkersComponent implements AfterViewInit {
   zoomLevel: number = 15;
   center: [number, number] = [-75.97396426489313, 4.5759589923197455];
 
+  //array markers
+
+  markers: MarkerColor[] = [];
+
   constructor() {}
 
   ngAfterViewInit(): void {
@@ -59,14 +68,20 @@ export class MarkersComponent implements AfterViewInit {
   addMarker() {
     const color = '#xxxxxx'.replace(/x/g, (y) =>
       ((Math.random() * 16) | 0).toString(16)
-    );
+    ); //generate a random hexadecimal number
 
     const newMarker = new mapboxgl.Marker({
       draggable: true,
-      color: color
+      color: color,
     })
       .setLngLat(this.center)
       .addTo(this.map);
+
+    this.markers.push({
+      color,
+      marker: newMarker
+    });
+    console.log(this.markers);
   }
 
   goMarker() {}

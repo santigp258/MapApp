@@ -1,11 +1,17 @@
 <ul class="list-group">
-    <li class="list-group-item list-group-item-info" (click)="addMarker()">
-        + add
-    </li>
+  <li class="list-group-item list-group-item-info" (click)="addMarker()">
+    + add
+  </li>
 
-    <li class="list-group-item" (click)="goMarker()">
-        Marker ir
-    </li>
+  <li
+    class="list-group-item"
+    (click)="goMarker()"
+    *ngFor="let marker of markers; let i = index"
+     [ngStyle]="{'background-color': marker.color}"
+  >
+    Marker number
+    {{ i  + 1}}
+  </li>
 </ul>
 
 <div #map class="map-container"></div>

@@ -44,7 +44,6 @@ export class MarkersComponent implements AfterViewInit {
   //array markers
 
   markers: MarkerColor[] = [];
-
   constructor() {}
 
   ngAfterViewInit(): void {
@@ -81,8 +80,14 @@ export class MarkersComponent implements AfterViewInit {
       color,
       marker: newMarker
     });
-    console.log(this.markers);
+    //console.log(this.newMarker.getLngLat());
   }
 
-  goMarker() {}
+  goMarker(marker: mapboxgl.Marker) {
+    const {lng, lat} = marker.getLngLat();
+    this.map.flyTo({
+      center: [lng, lat],
+      essential: true
+    })
+  }
 }

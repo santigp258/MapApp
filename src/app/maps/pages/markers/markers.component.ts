@@ -1,12 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 
-interface MarkerColor{
+interface MarkerColor {
   color: string;
   marker?: mapboxgl.Marker;
   center?: [number, number];
@@ -79,55 +74,75 @@ export class MarkersComponent implements AfterViewInit {
 
     this.markers.push({
       color,
-      marker: newMarker
+      marker: newMarker,
     });
     //console.log(this.newMarker.getLngLat());
-    this.saveMarkerLocalStorage()
+    this.saveMarkerLocalStorage();
+
+    newMarker.on('dragend', () => {
+      this.saveMarkerLocalStorage();
+    });
   }
 
   goMarker(marker: mapboxgl.Marker) {
-    const {lng, lat} = marker.getLngLat();
+    const { lng, lat } = marker.getLngLat();
     this.map.flyTo({
       center: [lng, lat],
-      essential: true
-    })
+      essential: true,
+    });
   }
 
-  saveMarkerLocalStorage(){
+  saveMarkerLocalStorage() {
+    const lngLatArr: MarkerColor[] = [];
 
-    const lngLatArr:MarkerColor[] = []
-
-    this.markers.forEach(m =>{
+    this.markers.forEach((m) => {
       const color = m.color;
-      const {lng, lat}= m.marker!.getLngLat()
+      const { lng, lat } = m.marker!.getLngLat();
 
       lngLatArr.push({
         color: color,
-        center: [lng, lat]
-      })
-    })
+        center: [lng, lat],
+      });
+    });
     //save localtorage
     localStorage.setItem('markers', JSON.stringify(lngLatArr));
   }
 
-  getLocalStorage(){
-    if(!localStorage.getItem('markers')){
+
+  getLocalStorage() {
+    if (!localStorage.getItem('markers')) {
       return;
     }
 
-    const lngLatArr: MarkerColor[] = JSON.parse(localStorage.getItem('markers')!);
+    const lngLatArr: MarkerColor[] = JSON.parse(
+      localStorage.getItem('markers')!
+    );
 
-    lngLatArr.forEach(m =>{
+    lngLatArr.forEach((m) => {
       const newMarker = new mapboxgl.Marker({
         color: m.color,
-        draggable: true, 
-      }).setLngLat(m.center!)
-      .addTo(this.map);
+        draggable: true,
+      })
+        .setLngLat(m.center!)
+        .addTo(this.map);
 
       this.markers.push({
         marker: newMarker,
-        color: m.color
-      })
-    })
+        color: m.color,
+      });
+      //guardar cuando se muevo los markers
+      newMarker.on('dragend', () => {
+        this.saveMarkerLocalStorage();
+      });
+    });
+  }
+
+
+  deleteMarker(i: number){
+    this.markers[i].marker?.remove();
+
+    this.markers.splice(i, 1);
+
+    this.saveMarkerLocalStorage();
   }
 }

@@ -1,1 +1,28 @@
-<p>propierties works!</p>
+<div class="row mt-3 text-light">
+    <div class="col-2">
+
+    </div>
+    <div class="col">
+        <h1>Propierties List</h1>
+    </div>
+</div>
+
+<div class="row container text-light">
+    <div class="col-2"></div>
+
+    <div class="col">
+        <div class="row">
+            <div class="col-4 mb-2" *ngFor="let propierty of Propierties">
+                <div class="card text-dark">
+                    <app-min-map [lngLat]="propierty.lngLat" class="card-img-top"></app-min-map>
+                    <div class="card-body">
+                        <h5 class="card-title">{{propierty.title}}</h5>
+                        <p class="card-text">{{propierty.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
